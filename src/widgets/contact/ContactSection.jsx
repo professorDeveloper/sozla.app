@@ -7,7 +7,7 @@ export default function ContactSection() {
   return (
     <section className="py-20 bg-gray-100 dark:bg-slate-900 transition-colors">
       <div className="container mx-auto px-4">
-        
+
         {/* TITLE */}
         <div className="text-center mb-16">
           <Title className={"mb-5"}>
@@ -20,7 +20,7 @@ export default function ContactSection() {
 
         {/* CARDS */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          
+
           {/* EMAIL CARD */}
           <div className="group flex flex-col items-center p-8 rounded-2xl bg-white dark:bg-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-transparent hover:border-red-200 dark:hover:border-red-900">
             <div className="w-16 h-16 flex items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 mb-6 group-hover:rotate-12 transition-transform duration-300">

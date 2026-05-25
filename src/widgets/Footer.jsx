@@ -30,15 +30,14 @@ const Footer = () => {
               Ilovani yuklab olish
             </h4>
             <div className="flex gap-4">
-              {/* Rasmdagidek och yashil backgroundli tugmalar */}
-              <Button>
+              <Button bg="#ffffff" borderColor="#519234">
                 <img
                   src={googlePlay}
                   alt="Google Play"
                   className="h-5 w-auto object-contain"
                 />
               </Button>
-              <Button>
+              <Button bg="#ffffff" borderColor="#519234">
                 <img
                   src={appStore}
                   alt="App Store"

@@ -1,9 +1,103 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Button from "@/shared/ui/Button";
 import logo from "@assets/img/sozla.svg";
 import { Link } from "react-router-dom";
 import ThemeToggle from "@/features/theme-toggle/ui/ThemeToggle";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown, Check } from "lucide-react";
+
+const LANGUAGES = [
+  { code: "uz", label: "O‘zbek", flag: "🇺🇿" },
+  { code: "ru", label: "Русский", flag: "🇷🇺" },
+  { code: "en", label: "English", flag: "🇬🇧" },
+];
+
+function LanguageDropdown({ fullWidth = false }) {
+  const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState(LANGUAGES[0]);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  return (
+    <div ref={ref} className={`relative ${fullWidth ? "w-full" : ""}`}>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className={`
+          group flex items-center justify-between gap-2
+          ${fullWidth ? "w-full px-4 py-3" : "px-3 py-2"}
+          rounded-xl border border-gray-200 dark:border-gray-700
+          bg-white dark:bg-gray-800
+          text-gray-700 dark:text-gray-200 font-medium
+          hover:border-primary dark:hover:border-primary
+          hover:shadow-sm transition-all duration-200
+          focus:outline-none focus:ring-2 focus:ring-primary/30
+        `}
+      >
+        <span className="flex items-center gap-2">
+          <span className="text-base leading-none">{selected.flag}</span>
+          <span className="text-sm">{selected.label}</span>
+        </span>
+        <ChevronDown
+          size={16}
+          className={`text-gray-400 transition-transform duration-200 ${
+            open ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+
+      <div
+        className={`
+          absolute ${fullWidth ? "left-0 right-0" : "right-0"} mt-2
+          ${fullWidth ? "" : "min-w-[160px]"}
+          origin-top
+          bg-white dark:bg-gray-800
+          border border-gray-100 dark:border-gray-700
+          rounded-xl shadow-lg shadow-gray-200/60 dark:shadow-black/40
+          overflow-hidden z-50
+          transition-all duration-200
+          ${open
+            ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
+            : "opacity-0 scale-95 -translate-y-1 pointer-events-none"}
+        `}
+      >
+        {LANGUAGES.map((lang) => {
+          const isActive = selected.code === lang.code;
+          return (
+            <button
+              key={lang.code}
+              type="button"
+              onClick={() => {
+                setSelected(lang);
+                setOpen(false);
+              }}
+              className={`
+                w-full flex items-center justify-between gap-2 px-4 py-2.5 text-sm
+                transition-colors duration-150
+                ${isActive
+                  ? "bg-primary/10 text-primary font-semibold"
+                  : "text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/60"}
+              `}
+            >
+              <span className="flex items-center gap-2">
+                <span className="text-base leading-none">{lang.flag}</span>
+                <span>{lang.label}</span>
+              </span>
+              {isActive && <Check size={16} className="text-primary" />}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
@@ -33,11 +127,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-4">
             <ThemeToggle />
 
-            <select className="bg-transparent text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none focus:border-primary transition pb-1">
-              <option className="bg-white text-black">O‘zbek</option>
-              <option className="bg-white text-black">Русский</option>
-              <option className="bg-white text-black">English</option>
-            </select>
+            <LanguageDropdown />
 
             <Button className="bg-primary text-white px-5 py-2 rounded-full hover:opacity-90">
               Yuklab olish
@@ -104,11 +194,7 @@ export default function Navbar() {
 
               {/* Bottom */}
               <div className="mt-auto bg-white dark:bg-gray-800 p-4 mb-2 rounded-2xl shadow-sm flex flex-col gap-4">
-                <select className="w-full border rounded-xl px-4 py-3 pr-12 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200">
-                  <option>O‘zbek</option>
-                  <option>Русский</option>
-                  <option>English</option>
-                </select>
+                <LanguageDropdown fullWidth />
 
                 <Button className="bg-primary text-white py-3 rounded-full w-full text-lg hover:opacity-90">
                   Yuklab olish
